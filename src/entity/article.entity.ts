@@ -19,5 +19,5 @@ export class ArticleEntity {
   isActive: boolean;
 
   @ManyToOne(() => ArticleCateEntity, (article_cate) => article_cate.article)
-  cateId: ArticleCateEntity;
+  cate: ArticleCateEntity;
 }

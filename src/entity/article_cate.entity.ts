@@ -12,6 +12,6 @@ export class ArticleCateEntity {
   @Column()
   state: number;
 
-  @OneToMany(() => ArticleEntity, (article) => article.cateId)
+  @OneToMany(() => ArticleEntity, (article) => article.cate)
   article: ArticleEntity[];
 }
