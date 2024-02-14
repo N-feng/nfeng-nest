@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { StudentController } from './student.controller';
 import { StudentService } from './student.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { StudentEntity } from 'src/entity/student.entity';
+import { Student } from 'src/model/student.model';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StudentEntity])],
+  imports: [SequelizeModule.forFeature([Student])],
   controllers: [StudentController],
   providers: [StudentService],
 })

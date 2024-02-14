@@ -1,27 +1,28 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ArticleModule } from './article/article.module';
 import { LessonModule } from './lesson/lesson.module';
 import { StudentModule } from './student/student.module';
+import { AccessModule } from './access/access.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({
+    SequelizeModule.forRootAsync({
       useFactory: () => ({
-        type: 'mysql',
+        dialect: 'mysql',
         host: process.env.DB_HOST,
         port: 3306,
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'beego',
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        models: [__dirname + '/**/*.model{.ts,.js}'],
         synchronize: true,
       }),
     }),
@@ -29,6 +30,7 @@ import { StudentModule } from './student/student.module';
     ArticleModule,
     LessonModule,
     StudentModule,
+    AccessModule,
   ],
   controllers: [AppController],
   providers: [AppService],

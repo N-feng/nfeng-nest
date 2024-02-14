@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LessonEntity } from '../entity/lesson.entity';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/sequelize';
+import { Lesson } from '../model/lesson.model';
+import { Student } from '../model/student.model';
 
 @Injectable()
 export class LessonService {
   constructor(
-    @InjectRepository(LessonEntity)
-    private readonly lessonRepository: Repository<LessonEntity>,
+    @InjectModel(Lesson)
+    private readonly lessonModel: typeof Lesson,
   ) {}
 
   async findAll() {
-    return await this.lessonRepository.find({
-      relations: ['lesson_student'],
+    return await this.lessonModel.findAll({
+      include: [Student],
     });
   }
 }

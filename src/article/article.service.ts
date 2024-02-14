@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { ArticleEntity } from '../entity/article.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Article } from '../model/article.model';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class ArticleService {
   constructor(
-    @InjectRepository(ArticleEntity)
-    private readonly articleRepository: Repository<ArticleEntity>,
+    @InjectModel(Article)
+    private articleModel: typeof Article,
   ) {}
 
   async findAll() {
-    return await this.articleRepository.find({ relations: ['cate'] });
+    return await this.articleModel.findAll({
+      // relations: ['cate']
+    });
   }
 }
