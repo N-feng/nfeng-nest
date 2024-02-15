@@ -13,7 +13,7 @@ export class UsersService {
 
   async findAll() {
     return await this.usersModel.findAll({
-      // relations: ['photos'],
+      include: ['photos'],
     });
   }
 

@@ -8,7 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-@Table({ tableName: 'photo' })
+@Table({ tableName: 'photo', timestamps: false })
 export class Photo extends Model<Photo> {
   @Column({ primaryKey: true })
   id: number;

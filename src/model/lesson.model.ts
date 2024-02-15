@@ -1,14 +1,12 @@
 import {
   BelongsToMany,
   Column,
-  // HasMany,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import Student from './student.model';
-import LessonStudent from './lesson_student.model';
-// import { LessonStudent } from './lesson_student.model';
+import { Student } from './student.model';
+import { LessonStudent } from './lesson_student.model';
 
 @Table({ tableName: 'lesson', timestamps: false })
 export class Lesson extends Model {
@@ -20,7 +18,8 @@ export class Lesson extends Model {
   name: string;
 
   @BelongsToMany(() => Student, () => LessonStudent)
-  students: Student[];
+  // students: Student[];
+  students: Array<Student & { LessonStudent: LessonStudent }>;
 }
 
 export default Lesson;

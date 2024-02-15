@@ -13,7 +13,6 @@ export class StudentService {
   async findAll() {
     return await this.studentModel.findAll({
       include: [Lesson],
-      // relations: ['lesson_student'],
     });
   }
 }
