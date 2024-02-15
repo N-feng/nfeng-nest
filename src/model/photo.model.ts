@@ -1,4 +1,4 @@
-import { Users } from './users.model';
+import { User } from './user.model';
 import {
   BelongsTo,
   Column,
@@ -13,12 +13,12 @@ export class Photo extends Model<Photo> {
   @Column({ primaryKey: true })
   id: number;
 
-  @ForeignKey(() => Users)
+  @ForeignKey(() => User)
   @Column
   userId: number;
 
-  @BelongsTo(() => Users)
-  user: Users;
+  @BelongsTo(() => User)
+  user: User;
 
   @Length({ max: 80 })
   @Column

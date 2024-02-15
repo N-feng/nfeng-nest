@@ -1,13 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Users } from '../model/users.model';
+import { User } from '../model/user.model';
 // import { Sequelize } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
+import UserRole from 'src/model/user_role.model';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(Users)
-    private usersModel: typeof Users,
+    @InjectModel(User)
+    private usersModel: typeof User,
+    @InjectModel(UserRole)
+    private userRoleModel: typeof UserRole,
     // private sequelize: Sequelize,
   ) {}
 
@@ -26,10 +29,24 @@ export class UsersService {
   }
 
   async update(id, user) {
-    return await this.usersModel.update(id, {
-      ...user,
-      password: user.password,
-    });
+    // 1. 删除用户角色
+    await this.userRoleModel.destroy({ where: { userId: id } });
+
+    // 2. 添加用户角色
+    for (let i = 0; i < user.roleIds.length; i++) {
+      await this.userRoleModel.create({
+        userId: id,
+        roleId: user.roleIds[i],
+      });
+    }
+
+    return await this.usersModel.update(
+      {
+        ...user,
+        password: user.password,
+      },
+      { where: { id } },
+    );
   }
 
   async delete(id) {
@@ -57,7 +74,7 @@ export class UsersService {
     // await queryRunner.startTransaction();
     // try {
     //   users.forEach(async (user) => {
-    //     await queryRunner.manager.getRepository(Users).save(user);
+    //     await queryRunner.manager.getRepository(User).save(user);
     //   });
 
     //   await queryRunner.commitTransaction();

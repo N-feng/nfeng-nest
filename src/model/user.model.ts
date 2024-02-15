@@ -1,8 +1,8 @@
 import { Photo } from './photo.model';
 import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'users', timestamps: false })
-export class Users extends Model<Users> {
+@Table({ tableName: 'user', timestamps: false })
+export class User extends Model<User> {
   @Column({ primaryKey: true })
   id: number;
 
@@ -31,4 +31,4 @@ export class Users extends Model<Users> {
   photos: Photo[];
 }
 
-export default Users;
+export default User;

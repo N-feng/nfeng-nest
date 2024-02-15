@@ -1,3 +1,3 @@
 export class Config {
-  static adminPath = 'api';
+  static adminPath = 'admin';
 }
