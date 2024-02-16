@@ -31,9 +31,9 @@ export class UsersController {
   @Get('findOne')
   @ApiOperation({ summary: '查询用户' })
   async findOne(@Query('username') username: string) {
-    const { password, ...user } = await this.usersService.findOne(username);
-    console.log(password);
-    return { code: 200, data: user };
+    const { age, email, mobile, password, sex, id } = await this.usersService.findOne(username);
+    const access = await this.usersService.getAccessById(id);
+    return { code: 200, data: { age, email, mobile, password, sex, username, access } };
   }
 
   @Put(':id')

@@ -2,7 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../model/user.model';
 // import { Sequelize } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
-import UserRole from 'src/model/user_role.model';
+import { UserRole } from 'src/model/user_role.model';
+import { Photo } from 'src/model/photo.model';
+import { Role } from 'src/model/role.model';
+import { Access } from 'src/model/access.model';
+import { RoleAccess } from 'src/model/role_access.model';
 
 @Injectable()
 export class UsersService {
@@ -11,21 +15,41 @@ export class UsersService {
     private usersModel: typeof User,
     @InjectModel(UserRole)
     private userRoleModel: typeof UserRole,
+    @InjectModel(RoleAccess) 
+    private roleAccessModel: typeof RoleAccess,
+    @InjectModel(Access)
+    private accessModel: typeof Access,
     // private sequelize: Sequelize,
   ) {}
 
   async findAll() {
     return await this.usersModel.findAll({
-      include: ['photos'],
+      include: [Photo, Role],
     });
   }
 
   async findOne(username) {
-    const u = await this.usersModel.findOne({ where: { username } });
+    const u = await this.usersModel.findOne({ where: { username }, include: [Photo, Role] });
     if (!u) {
       throw new BadRequestException({ code: 400, msg: '找不到用户' });
     }
     return u;
+  }
+
+  async getAccessById(id) {
+    const userRole = await this.userRoleModel.findAll({ where: { userId: id } });
+    const roleAccess = await this.roleAccessModel.findAll({
+      where: {
+        roleId: userRole.map((item) => item.roleId),
+      },
+      include: [Access],
+    })
+    const access = await this.accessModel.findAll({
+      where: {
+        id: roleAccess.map((item) => item.accessId),
+      }
+    });
+    return access;
   }
 
   async update(id, user) {

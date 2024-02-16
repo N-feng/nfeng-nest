@@ -1,5 +1,13 @@
+import {
+  BelongsToMany,
+  Column,
+  HasMany,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Photo } from './photo.model';
-import { Column, HasMany, Model, Table } from 'sequelize-typescript';
+import Role from './role.model';
+import UserRole from './user_role.model';
 
 @Table({ tableName: 'user', timestamps: false })
 export class User extends Model<User> {
@@ -29,6 +37,9 @@ export class User extends Model<User> {
 
   @HasMany(() => Photo, 'userId')
   photos: Photo[];
+
+  @BelongsToMany(() => Role, () => UserRole)
+  role: Role;
 }
 
 export default User;

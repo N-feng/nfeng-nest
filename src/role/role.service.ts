@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import Access from 'src/model/access.model';
 import Role from 'src/model/role.model';
 import RoleAccess from 'src/model/role_access.model';
+import Access from 'src/model/access.model';
 
 @Injectable()
 export class RoleService {
