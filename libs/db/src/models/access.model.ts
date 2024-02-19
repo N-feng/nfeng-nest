@@ -43,5 +43,3 @@ export class Access extends Model {
   @HasMany(() => Access)
   access: Access[];
 }
-
-export default Access;

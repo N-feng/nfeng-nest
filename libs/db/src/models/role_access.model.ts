@@ -8,31 +8,29 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import Role from './role.model';
-import User from './user.model';
+import { Access } from './access.model';
+import { Role } from './role.model';
 
-@Table({ tableName: 'user_role', timestamps: false })
-export class UserRole extends Model<UserRole> {
+@Table({ tableName: 'role_access', timestamps: false })
+export class RoleAccess extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
   id: number;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => Access)
   @Length({ max: 11 })
   @Column
-  public userId: number;
+  public accessId: number;
 
   @ForeignKey(() => Role)
   @Length({ max: 11 })
   @Column
   public roleId: number;
 
-  @BelongsTo(() => User)
-  public user: User;
+  @BelongsTo(() => Access)
+  public access: Access;
 
   @BelongsTo(() => Role)
   public role: Role;
 }
-
-export default UserRole;

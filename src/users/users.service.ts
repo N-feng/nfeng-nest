@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from '../model/user.model';
+import { User } from '../../libs/db/src/models/user.model';
 // import { Sequelize } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
-import { UserRole } from 'src/model/user_role.model';
-import { Photo } from 'src/model/photo.model';
-import { Role } from 'src/model/role.model';
-import { Access } from 'src/model/access.model';
-import { RoleAccess } from 'src/model/role_access.model';
+import { UserRole } from '@app/db/models/user_role.model';
+import { Photo } from '@app/db/models/photo.model';
+import { Role } from '@app/db/models/role.model';
+import { Access } from '@app/db/models/access.model';
+import { RoleAccess } from '@app/db/models/role_access.model';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +15,7 @@ export class UsersService {
     private usersModel: typeof User,
     @InjectModel(UserRole)
     private userRoleModel: typeof UserRole,
-    @InjectModel(RoleAccess) 
+    @InjectModel(RoleAccess)
     private roleAccessModel: typeof RoleAccess,
     @InjectModel(Access)
     private accessModel: typeof Access,
@@ -29,7 +29,10 @@ export class UsersService {
   }
 
   async findOne(username) {
-    const u = await this.usersModel.findOne({ where: { username }, include: [Photo, Role] });
+    const u = await this.usersModel.findOne({
+      where: { username },
+      include: [Photo, Role],
+    });
     if (!u) {
       throw new BadRequestException({ code: 400, msg: '找不到用户' });
     }
@@ -37,17 +40,19 @@ export class UsersService {
   }
 
   async getAccessById(id) {
-    const userRole = await this.userRoleModel.findAll({ where: { userId: id } });
+    const userRole = await this.userRoleModel.findAll({
+      where: { userId: id },
+    });
     const roleAccess = await this.roleAccessModel.findAll({
       where: {
         roleId: userRole.map((item) => item.roleId),
       },
       include: [Access],
-    })
+    });
     const access = await this.accessModel.findAll({
       where: {
         id: roleAccess.map((item) => item.accessId),
-      }
+      },
     });
     return access;
   }

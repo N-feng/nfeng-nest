@@ -5,8 +5,8 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import LessonStudent from './lesson_student.model';
-import Lesson from './lesson.model';
+import { LessonStudent } from './lesson_student.model';
+import { Lesson } from './lesson.model';
 
 @Table({ tableName: 'student', timestamps: false })
 export class Student extends Model {
@@ -20,5 +20,3 @@ export class Student extends Model {
   @BelongsToMany(() => Lesson, () => LessonStudent)
   lessons: Lesson[];
 }
-
-export default Student;

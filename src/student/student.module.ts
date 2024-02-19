@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { StudentController } from './student.controller';
 import { StudentService } from './student.service';
-import { Student } from 'src/model/student.model';
+import { Student } from '@app/db/models/student.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({

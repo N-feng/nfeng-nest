@@ -1,9 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  ArrayMinSize,
-  IsArray,
-  IsString,
-} from 'class-validator';
+import { ArrayMinSize, IsArray, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiPropertyOptional({ description: '用户名称', example: 'nfeng' })

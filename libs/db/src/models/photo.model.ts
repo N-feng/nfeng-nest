@@ -24,5 +24,3 @@ export class Photo extends Model<Photo> {
   @Column
   url: string;
 }
-
-export default Photo;

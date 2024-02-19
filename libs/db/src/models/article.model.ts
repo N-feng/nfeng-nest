@@ -33,5 +33,3 @@ export class Article extends Model {
   @BelongsTo(() => ArticleCate)
   cate: ArticleCate;
 }
-
-export default Article;

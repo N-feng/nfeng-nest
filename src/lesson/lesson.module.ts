@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LessonController } from './lesson.controller';
 import { LessonService } from './lesson.service';
-import { Lesson } from '../model/lesson.model';
+import { Lesson } from '../../libs/db/src/models/lesson.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({

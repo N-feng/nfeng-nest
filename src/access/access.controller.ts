@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Config } from 'src/config/config';
 import { AccessService } from './access.service';
@@ -14,6 +14,13 @@ export class AccessController {
   async findAll() {
     const result = await this.accessService.findAll();
     return { code: 200, data: { list: result } };
+  }
+
+  @Put('update/:id')
+  @ApiOperation({ summary: '更新权限' })
+  async update(@Param('id') id: string, @Body() body: CreateAccessDto) {
+    await this.accessService.update(id, body);
+    return { code: 200, data: {} };
   }
 
   @Post('create')

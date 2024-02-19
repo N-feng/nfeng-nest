@@ -8,8 +8,8 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import Access from './access.model';
-import RoleAccess from './role_access.model';
+import { RoleAccess } from './role_access.model';
+import { Access } from './access.model';
 
 @Table({ tableName: 'role' })
 export class Role extends Model {
@@ -33,5 +33,3 @@ export class Role extends Model {
   @BelongsToMany(() => Access, () => RoleAccess)
   access: Access[];
 }
-
-export default Role;

@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import Lesson from './lesson.model';
-import Student from './student.model';
+import { Lesson } from './lesson.model';
+import { Student } from './student.model';
 
 @Table({ tableName: 'lesson_student', timestamps: false })
 export class LessonStudent extends Model {
@@ -27,5 +27,3 @@ export class LessonStudent extends Model {
   @BelongsTo(() => Student)
   public student: Student;
 }
-
-export default LessonStudent;

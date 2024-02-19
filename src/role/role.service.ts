@@ -1,21 +1,18 @@
+import { Access } from '@app/db/models/access.model';
+import { Role } from '@app/db/models/role.model';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import Role from 'src/model/role.model';
-import RoleAccess from 'src/model/role_access.model';
-import Access from 'src/model/access.model';
 
 @Injectable()
 export class RoleService {
   constructor(
     @InjectModel(Role)
     private roleModel: typeof Role,
-    @InjectModel(RoleAccess)
-    private roleAccessModel: typeof RoleAccess,
   ) {}
 
   async findAll() {
     return await this.roleModel.findAll({
-      include: [Access],
+      // include: [Access],
     });
   }
 
@@ -46,13 +43,5 @@ export class RoleService {
       throw new BadRequestException({ code: 400, msg: '用户已经注册' });
     }
     return await this.roleModel.create(user);
-  }
-
-  async deleteRoleAccess(body) {
-    return await this.roleAccessModel.destroy(body);
-  }
-
-  async createRoleAccess(body) {
-    return await this.roleAccessModel.create(body);
   }
 }

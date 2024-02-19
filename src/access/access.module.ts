@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Access } from '../model/access.model';
+import { Access } from '../../libs/db/src/models/access.model';
 import { AccessService } from './access.service';
 import { AccessController } from './access.controller';
 

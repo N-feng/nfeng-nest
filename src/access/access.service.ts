@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Access } from '../model/access.model';
+import { Access } from '../../libs/db/src/models/access.model';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
@@ -20,5 +20,9 @@ export class AccessService {
 
   async create(body) {
     await this.accessModel.create(body);
+  }
+
+  async update(id, body) {
+    await this.accessModel.update(body, { where: { id } });
   }
 }

@@ -21,5 +21,3 @@ export class Lesson extends Model {
   // students: Student[];
   students: Array<Student & { LessonStudent: LessonStudent }>;
 }
-
-export default Lesson;

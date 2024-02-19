@@ -15,5 +15,3 @@ export class ArticleCate extends Model {
   @HasMany(() => Article)
   article: Article[];
 }
-
-export default ArticleCate;
