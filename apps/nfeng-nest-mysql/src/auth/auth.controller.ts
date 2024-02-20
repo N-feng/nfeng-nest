@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Request,
-  BadRequestException,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateRoleAccessDto } from 'src/auth/dto/role_access.dto';
 import { Config } from 'src/config/config';
@@ -22,15 +16,9 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: '登录' })
-  async login(@Body() body: LoginDto, @Request() req) {
+  async login(@Body() body: LoginDto) {
     const password = this.toolsService.getMd5(body.password);
-    const userResult = await this.authService.findUser({ ...body, password });
-    if (userResult.length > 0) {
-      req.session.userInfo = userResult[0];
-      return { code: 200, msg: '登录成功' };
-    } else {
-      throw new BadRequestException({ code: 400, msg: '用户名或者密码不正确' });
-    }
+    return await this.authService.login({ ...body, password });
   }
 
   @Post('doAuth')

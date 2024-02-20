@@ -39,5 +39,5 @@ export class User extends Model<User> {
   photos: Photo[];
 
   @BelongsToMany(() => Role, () => UserRole)
-  role: Role;
+  roles: Role[];
 }

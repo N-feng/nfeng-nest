@@ -7,8 +7,14 @@ import { Photo } from './models/photo.model';
 import { Role } from './models/role.model';
 import { User } from './models/user.model';
 import { UserRole } from './models/user_role.model';
+import { Article } from './models/article.model';
+import { Lesson } from './models/lesson.model';
+import { Student } from './models/student.model';
 
 const models = SequelizeModule.forFeature([
+  Article,
+  Lesson,
+  Student,
   User,
   UserRole,
   Photo,

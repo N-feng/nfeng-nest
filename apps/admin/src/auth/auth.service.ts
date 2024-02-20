@@ -1,15 +1,19 @@
 import { Access } from '@app/db/models/access.model';
-import { Photo } from '@app/db/models/photo.model';
-import { Role } from '@app/db/models/role.model';
 import { RoleAccess } from '@app/db/models/role_access.model';
 import { User } from '@app/db/models/user.model';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
-import { Config } from 'src/config/config';
+import { Config } from '../config/config';
+import { UsersService } from '../users/users.service';
+import { ToolsService } from '../tools/tools.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly toolService: ToolsService,
     @InjectModel(RoleAccess)
     private roleAccessModel: typeof RoleAccess,
     @InjectModel(Access)
@@ -85,12 +89,73 @@ export class AuthService {
     }
   }
 
-  async findUser(user: any) {
-    return await this.usersModel.findAll({
-      include: [Photo, Role],
-      where: {
-        ...user,
-      },
-    });
+  async login(user: any) {
+    const userResult = await this.usersModel.findOne({ where: { ...user } });
+    if (!userResult) {
+      throw new BadRequestException({ code: 400, msg: '用户名或者密码不正确' });
+    }
+    const payload = {
+      ...userResult,
+      username: userResult.username,
+      sub: userResult.id,
+    };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  // JWT验证 - Step 2: 校验用户信息
+  async validateUser(username: string, password: string): Promise<any> {
+    console.log('JWT验证 - Step 2: 校验用户信息');
+    const user = await this.usersService.findOne(username);
+    if (user) {
+      const hashedPassword = user.password;
+      // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等
+      const hashPassword = this.toolService.getMd5(password);
+      if (hashedPassword === hashPassword) {
+        // 密码正确
+        return {
+          code: 1,
+          user,
+        };
+      } else {
+        // 密码错误
+        return {
+          code: 2,
+          user: null,
+        };
+      }
+    }
+    // 查无此人
+    return {
+      code: 3,
+      user: null,
+    };
+  }
+
+  // JWT验证 - Step 3: 处理 jwt 签证
+  async certificate(user: any) {
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      roles: user.roles,
+      roleIds: user.roles.map((role) => role.id),
+    };
+    console.log('JWT验证 - Step 3: 处理 jwt 签证');
+    try {
+      const token = this.jwtService.sign(payload);
+      return {
+        code: 200,
+        data: {
+          token,
+        },
+        msg: `登录成功`,
+      };
+    } catch (error) {
+      return {
+        code: 600,
+        msg: `账号或密码错误`,
+      };
+    }
   }
 }

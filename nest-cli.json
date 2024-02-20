@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/admin/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "tsConfigPath": "apps/admin/tsconfig.app.json"
   },
   "projects": {
     "common": {
@@ -24,6 +25,26 @@
       "compilerOptions": {
         "tsConfigPath": "libs/db/tsconfig.lib.json"
       }
+    },
+    "nfeng-nest-mysql": {
+      "type": "application",
+      "root": "apps/nfeng-nest-mysql",
+      "entryFile": "main",
+      "sourceRoot": "apps/nfeng-nest-mysql/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/nfeng-nest-mysql/tsconfig.app.json"
+      }
+    },
+    "admin": {
+      "type": "application",
+      "root": "apps/admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/admin/tsconfig.app.json"
+      }
     }
-  }
+  },
+  "monorepo": true,
+  "root": "apps/nfeng-nest-mysql"
 }
