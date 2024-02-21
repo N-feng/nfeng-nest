@@ -15,10 +15,11 @@ import { AccessService } from './access/access.service';
 import { RoleService } from './role/role.service';
 import { AuthService } from './auth/auth.service';
 import { ToolsService } from './tools/tools.service';
-import { Config } from './config/config';
-import { AuthMiddleware } from './middleware/auth.middleware';
 import { LocalStrategy } from './auth/local.strategy';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './common/guard/auth.guard';
+import { RolesGuard } from './common/guard/roles.guard';
 
 @Module({
   imports: [CommonModule],
@@ -42,11 +43,19 @@ import { JwtStrategy } from './auth/jwt.strategy';
     ToolsService,
     LocalStrategy,
     JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
   exports: [ArticleService],
 })
 export class AdminModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(`${Config.adminPath}/*`);
+    console.log('consumer: ', consumer);
   }
 }

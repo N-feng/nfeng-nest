@@ -1,7 +1,7 @@
 import { Access } from '@app/db/models/access.model';
 import { RoleAccess } from '@app/db/models/role_access.model';
 import { User } from '@app/db/models/user.model';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Config } from '../config/config';
@@ -41,45 +41,46 @@ export class AuthService {
     }
   }
 
-  async checkAuth(req) {
+  async checkAuth(request) {
     /*
-      1、获取当前用户的角色    （如果超级用户跳过权限判断 isSuper=1）
-      2、根据角色获取当前角色的权限列表
+      1、获取当前用户的角色和isSuper  如果isSuper==1或者当前访问地址在忽略的权限列表中的话允许访问
+      2、根据角色获取当前角色的权限列表                       
       3、获取当前访问的url 对应的权限id
       4、判断当前访问的url对应的权限id 是否在权限列表中的id中
     */
 
-    // 1、获取当前用户的角色
-    const userInfo = req.session.userInfo;
-    const roleId = userInfo.roleId;
-    if (userInfo.isSuper == 1) {
-      // 超级管理员
+    // 1、获取当前用户的角色和isSuper
+    const roles = request.user.roles;
+    const isSuper = request.user.isSuper;
+    const adminPath = Config.adminPath;
+    const pathname = request.url; // 当前访问的地址
+
+    // 忽略权限判断的地址
+    if (Config.ignoreUrl.indexOf(pathname) != -1 || isSuper == 1) {
       return true;
     }
 
     // 2、根据角色获取当前角色的权限列表
-    const roleAccessResult = await this.roleAccessModel.findAll({
+    const roleAccessArr = [];
+    const roleAuthResult = await this.roleAccessModel.findAll({
       where: {
-        roleId,
+        roleId: roles.map((role) => role.id),
       },
     });
-    const roleAccessArray = [];
-    roleAccessResult.forEach((value) => {
-      roleAccessArray.push(value.accessId.toString());
-    });
+    for (let i = 0; i < roleAuthResult.length; i++) {
+      roleAccessArr.push(roleAuthResult[i].accessId);
+    }
 
     // 3、获取当前访问的url 对应的权限id
-    const { baseUrl } = req;
-    const pathname = baseUrl.replace(`/${Config.adminPath}/`, '');
-    const accessResult = await this.accessModel.findAll({
+    const accessUrl = request.url.replace(`/${adminPath}/`, '');
+    const accessUrlResult = await this.accessModel.findAll({
       where: {
-        url: pathname,
+        url: accessUrl,
       },
     });
-
-    if (accessResult.length > 0) {
-      // 4、判断当前访问的url对应的权限id 是否在权限列表中的id中
-      if (roleAccessArray.indexOf(accessResult[0].id.toString()) != -1) {
+    // 4、判断当前访问的url对应的权限id 是否在权限列表中的id中
+    if (accessUrlResult.length > 0) {
+      if (roleAccessArr.indexOf(accessUrlResult[0].id) != -1) {
         return true;
       } else {
         return false;
@@ -87,21 +88,6 @@ export class AuthService {
     } else {
       return false;
     }
-  }
-
-  async login(user: any) {
-    const userResult = await this.usersModel.findOne({ where: { ...user } });
-    if (!userResult) {
-      throw new BadRequestException({ code: 400, msg: '用户名或者密码不正确' });
-    }
-    const payload = {
-      ...userResult,
-      username: userResult.username,
-      sub: userResult.id,
-    };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
   }
 
   // JWT验证 - Step 2: 校验用户信息
@@ -135,11 +121,28 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
+    // 1、获取当前用户的角色和isSuper
+    const roles = user.roles;
+
+    // 2、根据角色获取当前角色的权限列表
+    const roleAccessArr = [];
+    const roleAuthResult = await this.roleAccessModel.findAll({
+      where: {
+        roleId: roles.map((role) => role.id),
+      },
+    });
+    for (let i = 0; i < roleAuthResult.length; i++) {
+      roleAccessArr.push(roleAuthResult[i].accessId);
+    }
+
     const payload = {
       username: user.username,
       sub: user.id,
       roles: user.roles,
       roleIds: user.roles.map((role) => role.id),
+      isSuper: user.isSuper,
+      access: roleAuthResult,
+      accessIds: roleAccessArr,
     };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
