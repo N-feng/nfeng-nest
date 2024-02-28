@@ -12,7 +12,7 @@ export class RoleService {
 
   async findAll() {
     return await this.roleModel.findAll({
-      // include: [Access],
+      include: [Access],
     });
   }
 
@@ -27,14 +27,6 @@ export class RoleService {
     return u;
   }
 
-  async update(id, user) {
-    return await this.roleModel.update(id, user);
-  }
-
-  async delete(id) {
-    return await this.roleModel.destroy(id);
-  }
-
   async create(user) {
     const { title } = user;
     const u = await this.roleModel.findOne({ where: { title } });
@@ -43,5 +35,13 @@ export class RoleService {
       throw new BadRequestException({ code: 400, msg: '用户已经注册' });
     }
     return await this.roleModel.create(user);
+  }
+
+  async update(id, user) {
+    return await this.roleModel.update(id, user);
+  }
+
+  async delete(id) {
+    return await this.roleModel.destroy(id);
   }
 }

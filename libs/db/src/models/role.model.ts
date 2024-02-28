@@ -16,7 +16,7 @@ export class Role extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column({ allowNull: true })
-  id: string;
+  id: number;
 
   @Column
   title: string;

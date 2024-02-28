@@ -1,10 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsNumber } from 'class-validator';
 
 export class CreateRoleAccessDto {
   @ApiPropertyOptional({ description: '角色ID' })
-  @IsString()
-  roleId: string;
+  @IsNumber()
+  roleId: number;
 
   @ApiPropertyOptional({ description: '授权节点' })
   @IsArray()

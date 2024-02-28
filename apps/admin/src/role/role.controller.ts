@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
@@ -25,9 +24,9 @@ export class RoleController {
 
   @Post('findAll')
   @ApiOperation({ summary: '角色列表' })
-  async findAll(@Req() req) {
+  async findAll() {
     const result = await this.roleService.findAll();
-    return { code: 200, data: { list: result, user: req.user } };
+    return { code: 200, data: result };
   }
 
   @Get('findOne')
@@ -35,6 +34,13 @@ export class RoleController {
   async findOne(@Query('id') id: string) {
     const user = await this.roleService.findOne(id);
     return { code: 200, data: user };
+  }
+
+  @Post('create')
+  @ApiOperation({ summary: '创建角色' })
+  async create(@Body() body: CreateRoleDto) {
+    await this.roleService.create(body);
+    return { code: 200, data: {} };
   }
 
   @Put('update/:id')
@@ -48,13 +54,6 @@ export class RoleController {
   @ApiOperation({ summary: '删除角色' })
   async remove(@Query('id') id: string) {
     await this.roleService.delete(id);
-    return { code: 200, data: {} };
-  }
-
-  @Post('create')
-  @ApiOperation({ summary: '创建角色' })
-  async create(@Body() body: CreateRoleDto) {
-    await this.roleService.create(body);
     return { code: 200, data: {} };
   }
 }

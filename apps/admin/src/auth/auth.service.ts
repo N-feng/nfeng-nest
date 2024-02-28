@@ -135,13 +135,22 @@ export class AuthService {
       roleAccessArr.push(roleAuthResult[i].accessId);
     }
 
+    // 3、根据权限ID列表获取菜单
+    const access = await this.accessModel.findAll({
+      where: {
+        id: roleAccessArr,
+        moduleId: 0,
+      },
+      include: [Access],
+    });
+
     const payload = {
       username: user.username,
       sub: user.id,
       roles: user.roles,
       roleIds: user.roles.map((role) => role.id),
       isSuper: user.isSuper,
-      access: roleAuthResult,
+      access: access,
       accessIds: roleAccessArr,
     };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');

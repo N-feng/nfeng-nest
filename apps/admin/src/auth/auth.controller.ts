@@ -44,7 +44,11 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: '获取个人信息' })
   async getProfile(@Req() req) {
-    return req.user;
+    return {
+      code: 200,
+      data: req.user,
+      msg: '请求成功',
+    };
   }
 
   @Post('doAuth')

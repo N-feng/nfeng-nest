@@ -57,31 +57,6 @@ export class UsersService {
     return access;
   }
 
-  async update(id, user) {
-    // 1. 删除用户角色
-    await this.userRoleModel.destroy({ where: { userId: id } });
-
-    // 2. 添加用户角色
-    for (let i = 0; i < user.roleIds.length; i++) {
-      await this.userRoleModel.create({
-        userId: id,
-        roleId: user.roleIds[i],
-      });
-    }
-
-    return await this.usersModel.update(
-      {
-        ...user,
-        password: user.password,
-      },
-      { where: { id } },
-    );
-  }
-
-  async delete(id) {
-    return await this.usersModel.destroy(id);
-  }
-
   async create(user) {
     const { username } = user;
     const u = await this.usersModel.findOne({ where: { username } });
@@ -114,5 +89,30 @@ export class UsersService {
     //   //你需要手动实例化并部署一个queryRunner
     //   await queryRunner.release();
     // }
+  }
+
+  async update(id, user) {
+    // 1. 删除用户角色
+    await this.userRoleModel.destroy({ where: { userId: id } });
+
+    // 2. 添加用户角色
+    for (let i = 0; i < user.roleIds.length; i++) {
+      await this.userRoleModel.create({
+        userId: id,
+        roleId: user.roleIds[i],
+      });
+    }
+
+    return await this.usersModel.update(
+      {
+        ...user,
+        password: user.password,
+      },
+      { where: { id } },
+    );
+  }
+
+  async delete(id) {
+    return await this.usersModel.destroy(id);
   }
 }

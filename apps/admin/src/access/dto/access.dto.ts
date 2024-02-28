@@ -14,13 +14,18 @@ export class CreateAccessDto {
   url: string;
   @ApiPropertyOptional({
     description: '此moduleId和当前模型的_id关联 moduleId=0 表示模块',
-    example: '0',
+    example: 0,
   })
-  moduleId: string;
+  moduleId: number;
   @ApiPropertyOptional({ description: '排序', example: 100 })
   sort: number;
   @ApiPropertyOptional({ description: '描述', example: '' })
   description: string;
   @ApiPropertyOptional({ description: '状态', example: 1 })
   status: string;
+
+  current: number;
+  pageSize: number;
+  filter: object;
+  sorter: object;
 }
