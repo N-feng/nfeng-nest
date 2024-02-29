@@ -26,7 +26,7 @@ export class RoleController {
   @ApiOperation({ summary: '角色列表' })
   async findAll() {
     const result = await this.roleService.findAll();
-    return { code: 200, data: result };
+    return { code: 200, data: { list: result } };
   }
 
   @Get('findOne')

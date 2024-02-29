@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Config } from '../config/config';
 import { AuthService } from './auth.service';
-import { ToolsService } from '../tools/tools.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateRoleAccessDto } from './dto/role_access.dto';
 import { Public } from '../common/docotator/public.decorator';
@@ -10,23 +9,20 @@ import { Public } from '../common/docotator/public.decorator';
 @Controller(`${Config.adminPath}`)
 @ApiTags('账户')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private toolsService: ToolsService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
   @Post('/login')
   @ApiOperation({ summary: '登录' })
   async login(@Body() body: LoginDto) {
     console.log('JWT验证 - Step 1: 用户请求登录');
-    const authResult = await this.authService.validateUser(
+    const userResult = await this.authService.validateUser(
       body.username,
       body.password,
     );
-    switch (authResult.code) {
+    switch (userResult.code) {
       case 1:
-        return this.authService.certificate(authResult.user);
+        return this.authService.certificate(userResult.user);
       case 2:
         return {
           code: 600,
@@ -44,9 +40,16 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: '获取个人信息' })
   async getProfile(@Req() req) {
+    const { sub, username, roles, roleIds, access } = req.user;
     return {
       code: 200,
-      data: req.user,
+      data: {
+        userId: sub,
+        username,
+        roles,
+        roleIds,
+        access,
+      },
       msg: '请求成功',
     };
   }

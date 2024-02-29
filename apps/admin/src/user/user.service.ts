@@ -1,15 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-// import { Sequelize } from 'sequelize';
-import { InjectModel } from '@nestjs/sequelize';
-import { UserRole } from '@app/db/models/user_role.model';
+import { Access } from '@app/db/models/access.model';
 import { Photo } from '@app/db/models/photo.model';
 import { Role } from '@app/db/models/role.model';
-import { Access } from '@app/db/models/access.model';
 import { RoleAccess } from '@app/db/models/role_access.model';
 import { User } from '@app/db/models/user.model';
+import { UserRole } from '@app/db/models/user_role.model';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectModel(User)
     private usersModel: typeof User,
@@ -113,6 +112,8 @@ export class UsersService {
   }
 
   async delete(id) {
-    return await this.usersModel.destroy(id);
+    return await this.usersModel.destroy({
+      where: { id },
+    });
   }
 }

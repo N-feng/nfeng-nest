@@ -1,25 +1,22 @@
 import { Access } from '@app/db/models/access.model';
 import { RoleAccess } from '@app/db/models/role_access.model';
-import { User } from '@app/db/models/user.model';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Config } from '../config/config';
-import { UsersService } from '../users/users.service';
 import { ToolsService } from '../tools/tools.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly toolService: ToolsService,
     @InjectModel(RoleAccess)
     private roleAccessModel: typeof RoleAccess,
     @InjectModel(Access)
     private accessModel: typeof Access,
-    @InjectModel(User)
-    private usersModel: typeof User,
   ) {}
 
   async doAuth(body) {
@@ -93,7 +90,7 @@ export class AuthService {
   // JWT验证 - Step 2: 校验用户信息
   async validateUser(username: string, password: string): Promise<any> {
     console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findOne(username);
+    const user = await this.userService.findOne(username);
     if (user) {
       const hashedPassword = user.password;
       // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等

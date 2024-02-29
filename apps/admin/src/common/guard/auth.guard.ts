@@ -7,15 +7,21 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY } from '../docotator/public.decorator';
+import { AuthService } from '../../auth/auth.service';
+import { Config } from '../../config/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    private authService: AuthService,
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // 在这里添加您自定义的认证逻辑
+    // 比如，检查请求头中是否有 Authorization 字段
+    // 如果没有，拒绝访问
+    console.log('auth guard');
     // 例如，调用 super.logIn(request) 来建立一个 session
     const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -36,9 +42,28 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.SECRET,
       });
+
       // 💡 在这里我们将 payload 挂载到请求对象上
       // 以便我们可以在路由处理器中访问它
       request['user'] = payload;
+
+      // 排除权限判断的页面
+      const pathname = request.url;
+      if (pathname == `/${Config.adminPath}/profile`) {
+        return true;
+      }
+
+      if (payload && payload.username) {
+        const hasAuth = await this.authService.checkAuth(request);
+        if (hasAuth) {
+          return true;
+        } else {
+          throw new UnauthorizedException({
+            code: 403,
+            msg: '您没有权限访问这个地址',
+          });
+        }
+      }
     } catch {
       throw new UnauthorizedException();
     }

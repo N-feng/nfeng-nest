@@ -3,56 +3,55 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Param,
   Post,
   Put,
   Query,
-  Res,
 } from '@nestjs/common';
+import { Config } from '../config/config';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/users.dto';
-import { Response } from 'express';
 import { ToolsService } from '../tools/tools.service';
-import { Config } from '../config/config';
+import { CreateUserDto } from './dto/users.dto';
+import { UserService } from './user.service';
 
-@Controller(`${Config.adminPath}/users`)
+@Controller(`${Config.adminPath}/user`)
 @ApiBearerAuth()
 @ApiTags('用户')
-export class UsersController {
+export class UserController {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
     private readonly toolsService: ToolsService,
   ) {}
 
   @Post('findAll')
   @ApiOperation({ summary: '用户列表' })
-  async findAll(@Res() res: Response) {
-    const result = await this.usersService.findAll();
+  async findAll() {
+    const result = await this.userService.findAll();
     // return { code: 200, data: { list: result } };
-    res.status(HttpStatus.OK).json({
-      code: 200,
-      data: result.map((item) => {
-        return {
-          ...item.toJSON(),
-          password: '',
-        };
-      }),
+    const list = result.map((item) => {
+      return {
+        ...item.toJSON(),
+        password: '',
+        roleIds: item.roles.map((role) => role.id),
+      };
     });
+    return {
+      code: 200,
+      data: { list },
+    };
   }
 
   @Get('findOne/:id')
   @ApiOperation({ summary: '查询用户' })
   async findOne(@Query('username') username: string = 'nfeng') {
     const { age, email, mobile, password, sex, id } =
-      await this.usersService.findOne(username);
-    const access = await this.usersService.getAccessById(id);
+      await this.userService.findOne(username);
+    const access = await this.userService.getAccessById(id);
     return {
       code: 200,
       data: { age, email, mobile, password, sex, username, access },
@@ -64,7 +63,7 @@ export class UsersController {
   async create(@Body() body: CreateUserDto) {
     const password = this.toolsService.getMd5(body.password);
     const newParam = { ...body, password, status: true };
-    await this.usersService.create(newParam);
+    await this.userService.create(newParam);
     return { code: 200, data: {} };
   }
 
@@ -72,7 +71,7 @@ export class UsersController {
   @ApiOperation({ summary: '批量创建用户' })
   async createMany(@Body() users) {
     const newUsers = users.map((user) => ({ ...user, status: true }));
-    await this.usersService.createMany(newUsers);
+    await this.userService.createMany(newUsers);
     return { code: 200, data: {} };
   }
 
@@ -82,20 +81,16 @@ export class UsersController {
     description: 'The record has been successfully created.',
   })
   @ApiOperation({ summary: '编辑用户' })
-  async update(
-    @Param('id') id: string,
-    @Body() body: CreateUserDto,
-    @Res() res: Response,
-  ) {
+  async update(@Param('id') id: string, @Body() body: CreateUserDto) {
     const password = this.toolsService.getMd5(body.password);
-    await this.usersService.update(id, { ...body, password });
-    res.status(HttpStatus.OK).send({ code: 200, data: {} });
+    await this.userService.update(id, { ...body, password });
+    return { code: 200, data: {} };
   }
 
   @Delete('remove')
   @ApiOperation({ summary: '删除用户' })
   async remove(@Query('id') id: string) {
-    await this.usersService.delete(id);
+    await this.userService.delete(id);
     return { code: 200, data: {} };
   }
 }
