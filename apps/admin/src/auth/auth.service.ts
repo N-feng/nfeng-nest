@@ -132,13 +132,22 @@ export class AuthService {
       roleAccessArr.push(roleAuthResult[i].accessId);
     }
 
+    // console.log('roleAccessArr: ', roleAccessArr);
     // 3、根据权限ID列表获取菜单
     const access = await this.accessModel.findAll({
       where: {
         id: roleAccessArr,
         moduleId: 0,
       },
-      include: [Access],
+      // include: [Access],
+      include: [
+        {
+          model: Access,
+          where: {
+            id: roleAccessArr,
+          },
+        },
+      ],
     });
 
     const payload = {

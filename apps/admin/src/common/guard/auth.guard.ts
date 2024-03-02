@@ -18,11 +18,6 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // 在这里添加您自定义的认证逻辑
-    // 比如，检查请求头中是否有 Authorization 字段
-    // 如果没有，拒绝访问
-    console.log('auth guard');
-    // 例如，调用 super.logIn(request) 来建立一个 session
     const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -65,7 +60,10 @@ export class AuthGuard implements CanActivate {
         }
       }
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        code: 401,
+        msg: 'token 过期或不正确',
+      });
     }
 
     // return super.canActivate(context);
