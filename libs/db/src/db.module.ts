@@ -10,6 +10,7 @@ import { UserRole } from './models/user_role.model';
 import { Article } from './models/article.model';
 import { Lesson } from './models/lesson.model';
 import { Student } from './models/student.model';
+import { Product } from './models/product.model';
 
 const models = SequelizeModule.forFeature([
   Article,
@@ -21,6 +22,7 @@ const models = SequelizeModule.forFeature([
   Role,
   RoleAccess,
   Access,
+  Product,
 ]);
 
 @Global()
@@ -34,7 +36,7 @@ const models = SequelizeModule.forFeature([
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'beego',
-        models: [User, UserRole, Photo, Role, RoleAccess, Access],
+        models: [User, UserRole, Photo, Role, RoleAccess, Access, Product],
       }),
     }),
     models,

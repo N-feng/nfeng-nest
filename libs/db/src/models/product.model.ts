@@ -1,4 +1,5 @@
-import { Column, CreatedAt, Model, Table } from 'sequelize-typescript';
+import { Column, CreatedAt, HasMany, Model, Table } from 'sequelize-typescript';
+import { Photo } from './photo.model';
 
 @Table({ tableName: 'product', timestamps: false }) // 设置表名称
 export class Product extends Model {
@@ -12,19 +13,19 @@ export class Product extends Model {
   price: number;
 
   @Column
-  imgUrl: string;
+  title: string;
 
   @Column
   content: string;
 
   @Column
-  saleCount: number;
+  sale_count: number;
 
   @Column
-  isBest: number;
+  is_best: number;
 
   @Column
-  isHot: number;
+  is_hot: number;
 
   @Column
   status: number;
@@ -33,5 +34,9 @@ export class Product extends Model {
   sort: number;
 
   @CreatedAt
-  addTime: Date; // 增加时间
+  created_at: Date; // 增加时间
+
+  @HasMany(() => Photo, 'productId')
+  // @Column
+  img_url: Photo[];
 }

@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CommonModule } from '@app/common';
 import { ArticleController } from './article/article.controller';
 import { LessonController } from './lesson/lesson.controller';
@@ -19,6 +19,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guard/auth.guard';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
+import { ProductController } from './product/product.controller';
+import { ProductService } from './product/product.service';
+import { PhotoController } from './photo/photo.controller';
+import { PhotoService } from './photo/photo.service';
 
 @Module({
   imports: [CommonModule],
@@ -30,6 +34,8 @@ import { UserService } from './user/user.service';
     RoleController,
     AuthController,
     UserController,
+    ProductController,
+    PhotoController,
   ],
   providers: [
     ArticleService,
@@ -46,11 +52,9 @@ import { UserService } from './user/user.service';
       useClass: AuthGuard,
     },
     UserService,
+    ProductService,
+    PhotoService,
   ],
   exports: [ArticleService],
 })
-export class AdminModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    console.log('consumer: ', consumer);
-  }
-}
+export class AdminModule {}
