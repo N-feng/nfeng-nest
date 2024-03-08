@@ -44,15 +44,12 @@ export class AuthGuard implements CanActivate {
 
       // 排除权限判断的页面
       const pathname = request.url;
-      console.log('pathname: ', pathname);
       if (pathname == `/${Config.adminPath}/profile`) {
         return true;
       }
 
       if (payload && payload.username) {
-        console.log('payload.username: ', payload.username);
         const hasAuth = await this.authService.checkAuth(request);
-        console.log('hasAuth: ', hasAuth);
         if (hasAuth) {
           return true;
         } else {

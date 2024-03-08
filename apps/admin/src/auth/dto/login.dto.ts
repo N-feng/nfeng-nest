@@ -6,4 +6,7 @@ export class LoginDto {
 
   @ApiPropertyOptional()
   password: string;
+
+  @ApiPropertyOptional()
+  code: string;
 }

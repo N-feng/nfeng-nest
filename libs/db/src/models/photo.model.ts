@@ -5,7 +5,6 @@ import {
   Column,
   CreatedAt,
   ForeignKey,
-  Length,
   Model,
   Table,
   UpdatedAt,
@@ -30,7 +29,6 @@ export class Photo extends Model<Photo> {
   @BelongsTo(() => Product)
   product: Product;
 
-  @Length({ max: 80 })
   @Column
   url: string;
 

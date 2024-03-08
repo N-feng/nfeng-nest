@@ -23,6 +23,8 @@ import { ProductController } from './product/product.controller';
 import { ProductService } from './product/product.service';
 import { PhotoController } from './photo/photo.controller';
 import { PhotoService } from './photo/photo.service';
+import { ProductCateController } from './product-cate/product-cate.controller';
+import { ProductCateService } from './product-cate/product-cate.service';
 
 @Module({
   imports: [CommonModule],
@@ -36,6 +38,7 @@ import { PhotoService } from './photo/photo.service';
     UserController,
     ProductController,
     PhotoController,
+    ProductCateController,
   ],
   providers: [
     ArticleService,
@@ -54,6 +57,7 @@ import { PhotoService } from './photo/photo.service';
     UserService,
     ProductService,
     PhotoService,
+    ProductCateService,
   ],
   exports: [ArticleService],
 })

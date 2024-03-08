@@ -1,11 +1,22 @@
-import { Column, CreatedAt, HasMany, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  ForeignKey,
+  HasMany,
+  Model,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { Photo } from './photo.model';
+import { ProductCate } from './product_cate.model';
 
-@Table({ tableName: 'product', timestamps: false }) // 设置表名称
+@Table({ tableName: 'product' }) // 设置表名称
 export class Product extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
+  @ForeignKey(() => ProductCate)
   @Column
   cid: number;
 
@@ -34,9 +45,15 @@ export class Product extends Model {
   sort: number;
 
   @CreatedAt
-  created_at: Date; // 增加时间
+  createdAt?: Date; // 增加时间
+
+  @UpdatedAt
+  updatedAt?: Date;
 
   @HasMany(() => Photo, 'productId')
   // @Column
   img_url: Photo[];
+
+  @BelongsTo(() => ProductCate, 'cid')
+  pro_cat;
 }

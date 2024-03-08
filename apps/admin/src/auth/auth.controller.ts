@@ -1,25 +1,34 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Response,
+  Session,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Config } from '../config/config';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateRoleAccessDto } from './dto/role_access.dto';
 import { Public } from '../common/docotator/public.decorator';
+import { ToolsService } from '../tools/tools.service';
 
 @Controller(`${Config.adminPath}`)
 @ApiTags('账户')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly toolsService: ToolsService,
+  ) {}
 
   @Public()
   @Post('/login')
   @ApiOperation({ summary: '登录' })
-  async login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDto, @Req() request) {
     console.log('JWT验证 - Step 1: 用户请求登录');
-    const userResult = await this.authService.validateUser(
-      body.username,
-      body.password,
-    );
+    const userResult = await this.authService.validateUser(body, request);
     switch (userResult.code) {
       case 1:
         return this.authService.certificate(userResult.user);
@@ -28,12 +37,27 @@ export class AuthController {
           code: 600,
           msg: `账号或密码不正确`,
         };
+      case 3:
+        return {
+          code: 400,
+          msg: '验证码错误',
+        };
       default:
         return {
           code: 600,
           msg: `查无此人`,
         };
     }
+  }
+
+  @Public()
+  @Get('captcha')
+  @ApiOperation({ summary: '验证码' })
+  async captcha(@Response() res, @Session() session) {
+    const captcha = await this.toolsService.getCaptcha();
+    session.captcha = captcha.text;
+    res.type('image/svg+xml'); /*指定返回的类型*/
+    res.send(captcha.data); /*给页面返回一张图片*/
   }
 
   @Get('profile')

@@ -1,5 +1,6 @@
 import { Photo } from '@app/db/models/photo.model';
 import { Product } from '@app/db/models/product.model';
+import { ProductCate } from '@app/db/models/product_cate.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
@@ -23,7 +24,7 @@ export class ProductService {
         // moduleId: 0,
         ...params,
       },
-      include: [Photo],
+      include: [Photo, ProductCate],
     });
     const total = await this.productModel.count({
       where: {
@@ -44,12 +45,12 @@ export class ProductService {
     const { img_url, ...product } = body;
     const data = await this.productModel.create(product);
     for (let i = 0; i < img_url.length; i++) {
-      const { name, status, percent, response } = img_url[i];
+      const { name, status, percent, url } = img_url[i];
       await this.photoModel.create({
         name,
         status,
         percent,
-        url: response.link,
+        url,
         productId: data.id,
       });
     }
@@ -57,7 +58,28 @@ export class ProductService {
   }
 
   async update(id, body) {
-    return await this.productModel.update(body, { where: { id } });
+    const { img_url, ...product } = body;
+    await this.productModel.update(product, { where: { id } });
+    // 1、删除当前菜品下面的所有图片
+    await this.photoModel.destroy({
+      where: {
+        productId: id,
+      },
+    });
+
+    // 2、把当前菜品对应的所有图片增加到photo表里面
+    for (let i = 0; i < img_url.length; i++) {
+      const { name, status, percent, url } = img_url[i];
+      console.log('url: ', url);
+      await this.photoModel.create({
+        name,
+        status,
+        percent,
+        url,
+        productId: id,
+      });
+    }
+    return { data: id };
   }
 
   async delete(id) {

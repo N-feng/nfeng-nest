@@ -42,7 +42,7 @@ export class AccessService {
   }
 
   async delete(id) {
-    await this.roleAccessModel.destroy({ where: { accessId: id } });
+    // await this.roleAccessModel.destroy({ where: { accessId: id } });
     return await this.accessModel.destroy({ where: { id } });
   }
 }

@@ -88,7 +88,19 @@ export class AuthService {
   }
 
   // JWT验证 - Step 2: 校验用户信息
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(data: any, req): Promise<any> {
+    const { username, password, code } = data;
+
+    console.log('req.session: ', req.session);
+    if (
+      code.toLocaleLowerCase() !== req.session?.captcha?.toLocaleLowerCase()
+    ) {
+      return {
+        code: 3,
+        user: null,
+      };
+    }
+
     console.log('JWT验证 - Step 2: 校验用户信息');
     const user = await this.userService.findOne(username);
     if (user) {

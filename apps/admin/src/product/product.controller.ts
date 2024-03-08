@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Post,
   Put,
   Query,
@@ -32,9 +31,9 @@ export class ProductController {
     return { code: 200, data: { list }, success: true, total };
   }
 
-  @Get('findOne/:id')
+  @Get('findOne')
   @ApiOperation({ summary: '查询菜品' })
-  async findOne(@Param('id') id: number) {
+  async findOne(@Query('id') id: number) {
     const product = await this.productService.findOne(id);
     return {
       code: 200,
@@ -49,9 +48,9 @@ export class ProductController {
     return { code: 200, data };
   }
 
-  @Put('update/:id')
+  @Put('update')
   @ApiOperation({ summary: '更新菜品' })
-  async update(@Param('id') id: string, @Body() body) {
+  async update(@Query('id') id: string, @Body() body) {
     await this.productService.update(id, body);
     return { code: 200, data: {} };
   }
