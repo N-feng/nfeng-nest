@@ -4,6 +4,8 @@ import COS = require('cos-nodejs-sdk-v5');
 import { format } from 'silly-datetime';
 // import path from 'path';
 import svgCaptcha = require('svg-captcha');
+import { image } from 'qr-image';
+// import { Image, createCanvas } from 'canvas';
 
 @Injectable()
 export class ToolsService {
@@ -75,4 +77,58 @@ export class ToolsService {
       );
     });
   }
+
+  //获取图形二维码
+  async getQrImage(qrText) {
+    return new Promise((reslove, reject) => {
+      try {
+        const qrImage = image(qrText, { type: 'png' });
+        reslove(qrImage);
+      } catch (error) {
+        reject(false);
+      }
+    });
+  }
+
+  //合成图片
+  // async getCanvasImage(text, bgDir, codeDir) {
+  //   return new Promise((reslove, reject) => {
+  //     try {
+  //       const canvas = createCanvas(505, 730);
+  //       const ctx = canvas.getContext('2d');
+
+  //       //绘制背景图片
+  //       const img1 = new Image();
+  //       img1.onload = () => {
+  //         ctx.drawImage(img1, 0, 0);
+  //         //填充文字  注意字体
+  //         ctx.font = '30px "Microsoft YaHei"';
+  //         ctx.fillStyle = '#ffffff';
+  //         ctx.fillText(text, 170, 320);
+
+  //         const img2: any = new Image();
+  //         img2.onload = () => {
+  //           ctx.drawImage(img2, 150, 340);
+
+  //           // canvas.createPNGStream().pipe(fs.createWriteStream("out.png"));
+
+  //           reslove(canvas.createPNGStream());
+  //         };
+  //         img2.onerror = (err) => {
+  //           //  throw err
+  //           reject(err);
+  //         };
+  //         //需要注意顺序
+  //         img2.src = codeDir;
+  //       };
+  //       img1.onerror = (err) => {
+  //         reject(err);
+  //       };
+  //       //需要注意顺序
+  //       img1.src = bgDir;
+  //     } catch (error) {
+  //       reject(error);
+  //     }
+  //   });
+  // }
 }

@@ -25,6 +25,10 @@ import { PhotoController } from './photo/photo.controller';
 import { PhotoService } from './photo/photo.service';
 import { ProductCateController } from './product-cate/product-cate.controller';
 import { ProductCateService } from './product-cate/product-cate.service';
+import { TableController } from './table/table.controller';
+import { TableService } from './table/table.service';
+import { SettingController } from './setting/setting.controller';
+import { SettingService } from './setting/setting.service';
 
 @Module({
   imports: [CommonModule],
@@ -39,6 +43,8 @@ import { ProductCateService } from './product-cate/product-cate.service';
     ProductController,
     PhotoController,
     ProductCateController,
+    TableController,
+    SettingController,
   ],
   providers: [
     ArticleService,
@@ -58,6 +64,8 @@ import { ProductCateService } from './product-cate/product-cate.service';
     ProductService,
     PhotoService,
     ProductCateService,
+    TableService,
+    SettingService,
   ],
   exports: [ArticleService],
 })

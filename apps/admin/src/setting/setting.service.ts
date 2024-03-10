@@ -1,14 +1,13 @@
 import { PhotoModel } from '@app/db/models/photo.model';
-import { ProductModel } from '@app/db/models/product.model';
-import { ProductCate } from '@app/db/models/product_cate.model';
+import { SettingModel } from '@app/db/models/setting.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
-export class ProductService {
+export class SettingService {
   constructor(
-    @InjectModel(ProductModel)
-    private productModel: typeof ProductModel,
+    @InjectModel(SettingModel)
+    private settingModel: typeof SettingModel,
     @InjectModel(PhotoModel)
     private photoModel: typeof PhotoModel,
   ) {}
@@ -17,16 +16,16 @@ export class ProductService {
     const { current = 1, filter, pageSize = 9999, sorter, ...params } = body;
     console.log('filter: ', filter);
     console.log('sorter: ', sorter);
-    const list = await this.productModel.findAll({
+    const list = await this.settingModel.findAll({
       limit: pageSize,
       offset: (current - 1) * pageSize,
       where: {
         // moduleId: 0,
         ...params,
       },
-      include: [PhotoModel, ProductCate],
+      include: [PhotoModel],
     });
-    const total = await this.productModel.count({
+    const total = await this.settingModel.count({
       where: {
         ...params,
       },
@@ -35,7 +34,7 @@ export class ProductService {
   }
 
   async findOne(id) {
-    return await this.productModel.findOne({
+    return await this.settingModel.findOne({
       where: { id },
       include: [PhotoModel],
     });
@@ -43,7 +42,7 @@ export class ProductService {
 
   async create(body) {
     const { img_url, ...product } = body;
-    const data = await this.productModel.create(product);
+    const data = await this.settingModel.create(product);
     for (let i = 0; i < img_url.length; i++) {
       const { name, status, percent, url } = img_url[i];
       await this.photoModel.create({
@@ -59,7 +58,7 @@ export class ProductService {
 
   async update(id, body) {
     const { img_url, ...product } = body;
-    await this.productModel.update(product, { where: { id } });
+    await this.settingModel.update(product, { where: { id } });
     // 1、删除当前菜品下面的所有图片
     await this.photoModel.destroy({
       where: {
@@ -83,6 +82,6 @@ export class ProductService {
   }
 
   async delete(id) {
-    return await this.productModel.destroy({ where: { id } });
+    return await this.settingModel.destroy({ where: { id } });
   }
 }

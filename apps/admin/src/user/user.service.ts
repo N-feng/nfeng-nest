@@ -1,19 +1,19 @@
 import { Access } from '@app/db/models/access.model';
-import { Photo } from '@app/db/models/photo.model';
+import { PhotoModel } from '@app/db/models/photo.model';
 import { Role } from '@app/db/models/role.model';
 import { RoleAccess } from '@app/db/models/role_access.model';
-import { User } from '@app/db/models/user.model';
-import { UserRole } from '@app/db/models/user_role.model';
+import { UserModel } from '@app/db/models/user.model';
+import { UserRoleModel } from '@app/db/models/user_role.model';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User)
-    private usersModel: typeof User,
-    @InjectModel(UserRole)
-    private userRoleModel: typeof UserRole,
+    @InjectModel(UserModel)
+    private usersModel: typeof UserModel,
+    @InjectModel(UserRoleModel)
+    private userRoleModel: typeof UserRoleModel,
     @InjectModel(RoleAccess)
     private roleAccessModel: typeof RoleAccess,
     @InjectModel(Access)
@@ -23,14 +23,14 @@ export class UserService {
 
   async findAll() {
     return await this.usersModel.findAll({
-      include: [Photo, Role],
+      include: [PhotoModel, Role],
     });
   }
 
   async findOne(username) {
     const u = await this.usersModel.findOne({
       where: { username },
-      include: [Photo, Role],
+      include: [PhotoModel, Role],
     });
     if (!u) {
       throw new BadRequestException({ code: 400, msg: '找不到用户' });

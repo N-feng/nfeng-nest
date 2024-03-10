@@ -3,28 +3,32 @@ import { DbService } from './db.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RoleAccess } from './models/role_access.model';
 import { Access } from './models/access.model';
-import { Photo } from './models/photo.model';
+import { PhotoModel } from './models/photo.model';
 import { Role } from './models/role.model';
-import { User } from './models/user.model';
-import { UserRole } from './models/user_role.model';
+import { UserModel } from './models/user.model';
+import { UserRoleModel } from './models/user_role.model';
 import { Article } from './models/article.model';
 import { Lesson } from './models/lesson.model';
 import { Student } from './models/student.model';
-import { Product } from './models/product.model';
+import { ProductModel } from './models/product.model';
 import { ProductCate } from './models/product_cate.model';
+import { TableModel } from './models/table.model';
+import { SettingModel } from './models/setting.model';
 
 const models = SequelizeModule.forFeature([
   Article,
   Lesson,
   Student,
-  User,
-  UserRole,
-  Photo,
+  UserModel,
+  UserRoleModel,
+  PhotoModel,
   Role,
   RoleAccess,
   Access,
-  Product,
+  ProductModel,
   ProductCate,
+  TableModel,
+  SettingModel,
 ]);
 
 @Global()
@@ -39,14 +43,16 @@ const models = SequelizeModule.forFeature([
         password: process.env.DB_PASSWORD,
         database: 'beego',
         models: [
-          User,
-          UserRole,
-          Photo,
+          UserModel,
+          UserRoleModel,
+          PhotoModel,
           Role,
           RoleAccess,
           Access,
-          Product,
+          ProductModel,
           ProductCate,
+          TableModel,
+          SettingModel,
         ],
       }),
     }),

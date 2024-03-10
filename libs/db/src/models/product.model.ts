@@ -8,11 +8,11 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Photo } from './photo.model';
+import { PhotoModel } from './photo.model';
 import { ProductCate } from './product_cate.model';
 
 @Table({ tableName: 'product' }) // 设置表名称
-export class Product extends Model {
+export class ProductModel extends Model<ProductModel> {
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
@@ -50,9 +50,9 @@ export class Product extends Model {
   @UpdatedAt
   updatedAt?: Date;
 
-  @HasMany(() => Photo, 'productId')
+  @HasMany(() => PhotoModel, 'productId')
   // @Column
-  img_url: Photo[];
+  img_url: PhotoModel[];
 
   @BelongsTo(() => ProductCate, 'cid')
   pro_cat;

@@ -1,5 +1,6 @@
-import { Product } from './product.model';
-import { User } from './user.model';
+import { ProductModel } from './product.model';
+import { SettingModel } from './setting.model';
+import { UserModel } from './user.model';
 import {
   BelongsTo,
   Column,
@@ -11,23 +12,30 @@ import {
 } from 'sequelize-typescript';
 
 @Table({ tableName: 'photo' })
-export class Photo extends Model<Photo> {
+export class PhotoModel extends Model {
   @Column({ primaryKey: true })
   uid: number;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => UserModel)
   @Column
   userId: number;
 
-  @BelongsTo(() => User)
-  user: User;
+  @BelongsTo(() => UserModel)
+  user: UserModel;
 
-  @ForeignKey(() => Product)
+  @ForeignKey(() => ProductModel)
   @Column
   productId: number;
 
-  @BelongsTo(() => Product)
-  product: Product;
+  @BelongsTo(() => ProductModel)
+  product: ProductModel;
+
+  @ForeignKey(() => SettingModel)
+  @Column
+  settingId: number;
+
+  @BelongsTo(() => SettingModel)
+  setting: SettingModel;
 
   @Column
   url: string;

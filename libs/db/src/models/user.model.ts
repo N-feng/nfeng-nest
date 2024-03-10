@@ -7,12 +7,12 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Photo } from './photo.model';
+import { PhotoModel } from './photo.model';
 import { Role } from './role.model';
-import { UserRole } from './user_role.model';
+import { UserRoleModel } from './user_role.model';
 
 @Table({ tableName: 'user' })
-export class User extends Model<User> {
+export class UserModel extends Model<UserModel> {
   @Column({ primaryKey: true })
   id: number;
 
@@ -46,9 +46,9 @@ export class User extends Model<User> {
   @Column
   isSuper: number;
 
-  @HasMany(() => Photo, 'userId')
-  photos: Photo[];
+  @HasMany(() => PhotoModel, 'userId')
+  photos: PhotoModel[];
 
-  @BelongsToMany(() => Role, () => UserRole)
+  @BelongsToMany(() => Role, () => UserRoleModel)
   roles: Role[];
 }
