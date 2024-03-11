@@ -12,7 +12,7 @@ import { TableService } from './table.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Config } from '../config/config';
 import { Public } from '../common/docotator/public.decorator';
-import { ToolsService } from '../tools/tools.service';
+import { ToolsService } from '../../../../libs/tools/tools.service';
 
 @Controller(`${Config.adminPath}/table`)
 @ApiTags('桌号')

@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { SettingService } from './setting.service';
-import { ToolsService } from '../tools/tools.service';
+import { ToolsService } from '../../../../libs/tools/tools.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Config } from '../config/config';

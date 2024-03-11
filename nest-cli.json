@@ -26,15 +26,6 @@
         "tsConfigPath": "libs/db/tsconfig.lib.json"
       }
     },
-    "nfeng-nest-mysql": {
-      "type": "application",
-      "root": "apps/nfeng-nest-mysql",
-      "entryFile": "main",
-      "sourceRoot": "apps/nfeng-nest-mysql/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/nfeng-nest-mysql/tsconfig.app.json"
-      }
-    },
     "admin": {
       "type": "application",
       "root": "apps/admin",
@@ -43,8 +34,17 @@
       "compilerOptions": {
         "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
+    },
+    "server": {
+      "type": "application",
+      "root": "apps/server",
+      "entryFile": "main",
+      "sourceRoot": "apps/server/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
-  "root": "apps/nfeng-nest-mysql"
+  "root": "apps/server"
 }

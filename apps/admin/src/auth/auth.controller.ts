@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateRoleAccessDto } from './dto/role_access.dto';
 import { Public } from '../common/docotator/public.decorator';
-import { ToolsService } from '../tools/tools.service';
+import { ToolsService } from '../../../../libs/tools/tools.service';
 
 @Controller(`${Config.adminPath}`)
 @ApiTags('账户')

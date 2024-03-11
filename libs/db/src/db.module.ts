@@ -14,6 +14,7 @@ import { ProductModel } from './models/product.model';
 import { ProductCate } from './models/product_cate.model';
 import { TableModel } from './models/table.model';
 import { SettingModel } from './models/setting.model';
+import { CartModel } from './models/cart.model';
 
 const models = SequelizeModule.forFeature([
   Article,
@@ -29,6 +30,7 @@ const models = SequelizeModule.forFeature([
   ProductCate,
   TableModel,
   SettingModel,
+  CartModel,
 ]);
 
 @Global()
@@ -53,6 +55,7 @@ const models = SequelizeModule.forFeature([
           ProductCate,
           TableModel,
           SettingModel,
+          CartModel,
         ],
       }),
     }),

@@ -49,6 +49,15 @@ export class SettingModel extends Model {
   wifi_password: string;
 
   @Column
+  order_label: string;
+
+  @Column
+  alipay: string;
+
+  @Column
+  weixinpay: string;
+
+  @Column
   sort: number;
 
   @CreatedAt

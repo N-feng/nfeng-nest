@@ -13,7 +13,7 @@ import { ProductService } from './product.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Config } from '../config/config';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ToolsService } from '../tools/tools.service';
+import { ToolsService } from '../../../../libs/tools/tools.service';
 // import { createReadStream } from 'fs';
 
 @Controller(`${Config.adminPath}/product`)

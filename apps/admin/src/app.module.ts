@@ -1,34 +1,33 @@
-import { Module } from '@nestjs/common';
 import { CommonModule } from '@app/common';
-import { ArticleController } from './article/article.controller';
-import { LessonController } from './lesson/lesson.controller';
-import { StudentController } from './student/student.controller';
-import { AccessController } from './access/access.controller';
-import { RoleController } from './role/role.controller';
-import { AuthController } from './auth/auth.controller';
-import { ArticleService } from './article/article.service';
-import { LessonService } from './lesson/lesson.service';
-import { StudentService } from './student/student.service';
-import { AccessService } from './access/access.service';
-import { RoleService } from './role/role.service';
-import { AuthService } from './auth/auth.service';
-import { ToolsService } from './tools/tools.service';
-import { LocalStrategy } from './auth/local.strategy';
-import { JwtStrategy } from './auth/jwt.strategy';
+import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './common/guard/auth.guard';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
-import { ProductController } from './product/product.controller';
-import { ProductService } from './product/product.service';
+import { AccessController } from './access/access.controller';
+import { AccessService } from './access/access.service';
+import { ArticleController } from './article/article.controller';
+import { ArticleService } from './article/article.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { LocalStrategy } from './auth/local.strategy';
+import { LessonController } from './lesson/lesson.controller';
+import { LessonService } from './lesson/lesson.service';
 import { PhotoController } from './photo/photo.controller';
 import { PhotoService } from './photo/photo.service';
 import { ProductCateController } from './product-cate/product-cate.controller';
 import { ProductCateService } from './product-cate/product-cate.service';
-import { TableController } from './table/table.controller';
-import { TableService } from './table/table.service';
+import { ProductController } from './product/product.controller';
+import { ProductService } from './product/product.service';
+import { RoleController } from './role/role.controller';
+import { RoleService } from './role/role.service';
 import { SettingController } from './setting/setting.controller';
 import { SettingService } from './setting/setting.service';
+import { StudentController } from './student/student.controller';
+import { StudentService } from './student/student.service';
+import { TableController } from './table/table.controller';
+import { TableService } from './table/table.service';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { AuthGuard } from './common/guard/auth.guard';
 
 @Module({
   imports: [CommonModule],
@@ -53,7 +52,6 @@ import { SettingService } from './setting/setting.service';
     AccessService,
     RoleService,
     AuthService,
-    ToolsService,
     LocalStrategy,
     JwtStrategy,
     {
@@ -69,4 +67,4 @@ import { SettingService } from './setting/setting.service';
   ],
   exports: [ArticleService],
 })
-export class AdminModule {}
+export class AppModule {}

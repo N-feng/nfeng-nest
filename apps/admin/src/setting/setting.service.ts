@@ -41,19 +41,7 @@ export class SettingService {
   }
 
   async create(body) {
-    const { img_url, ...product } = body;
-    const data = await this.settingModel.create(product);
-    for (let i = 0; i < img_url.length; i++) {
-      const { name, status, percent, url } = img_url[i];
-      await this.photoModel.create({
-        name,
-        status,
-        percent,
-        url,
-        productId: data.id,
-      });
-    }
-    return { data: data.id };
+    return await this.settingModel.create(body);
   }
 
   async update(id, body) {

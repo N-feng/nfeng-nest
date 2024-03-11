@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Config } from '../config/config';
-import { ToolsService } from '../tools/tools.service';
+import { ToolsService } from '../../../../libs/tools/tools.service';
 import { UserService } from '../user/user.service';
 
 @Injectable()
