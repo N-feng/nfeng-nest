@@ -1,6 +1,6 @@
 import { PhotoModel } from '@app/db/models/photo.model';
 import { ProductModel } from '@app/db/models/product.model';
-import { ProductCate } from '@app/db/models/product_cate.model';
+import { ProductCate } from '@app/db/models/productCate.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
@@ -24,7 +24,8 @@ export class ProductService {
         // moduleId: 0,
         ...params,
       },
-      include: [PhotoModel, ProductCate],
+      // include: [PhotoModel, ProductCate],
+      include: [ProductCate],
     });
     const total = await this.productModel.count({
       where: {
@@ -37,7 +38,7 @@ export class ProductService {
   async findOne(id) {
     return await this.productModel.findOne({
       where: { id },
-      include: [PhotoModel],
+      // include: [PhotoModel],
     });
   }
 
@@ -58,28 +59,29 @@ export class ProductService {
   }
 
   async update(id, body) {
-    const { img_url, ...product } = body;
-    await this.productModel.update(product, { where: { id } });
+    // const { img_url, ...product } = body;
+    // await this.productModel.update(product, { where: { id } });
     // 1、删除当前菜品下面的所有图片
-    await this.photoModel.destroy({
-      where: {
-        productId: id,
-      },
-    });
+    // await this.photoModel.destroy({
+    //   where: {
+    //     productId: id,
+    //   },
+    // });
 
     // 2、把当前菜品对应的所有图片增加到photo表里面
-    for (let i = 0; i < img_url.length; i++) {
-      const { name, status, percent, url } = img_url[i];
-      console.log('url: ', url);
-      await this.photoModel.create({
-        name,
-        status,
-        percent,
-        url,
-        productId: id,
-      });
-    }
-    return { data: id };
+    // for (let i = 0; i < img_url.length; i++) {
+    //   const { name, status, percent, url } = img_url[i];
+    //   console.log('url: ', url);
+    //   await this.photoModel.create({
+    //     name,
+    //     status,
+    //     percent,
+    //     url,
+    //     productId: id,
+    //   });
+    // }
+    // return { data: id };
+    return await this.productModel.update(body, { where: { id } });
   }
 
   async delete(id) {

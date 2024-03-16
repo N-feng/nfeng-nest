@@ -1,9 +1,9 @@
 import { Access } from '@app/db/models/access.model';
 import { PhotoModel } from '@app/db/models/photo.model';
 import { Role } from '@app/db/models/role.model';
-import { RoleAccess } from '@app/db/models/role_access.model';
+import { RoleAccess } from '@app/db/models/roleAccess.model';
 import { UserModel } from '@app/db/models/user.model';
-import { UserRoleModel } from '@app/db/models/user_role.model';
+import { UserRoleModel } from '@app/db/models/userRole.model';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 

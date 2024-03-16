@@ -22,7 +22,7 @@ export class AccessController {
   @ApiOperation({ summary: '权限列表' })
   async findAll(@Body() body: CreateAccessDto) {
     const { list, total } = await this.accessService.findAll(body);
-    return { code: 200, data: { list }, success: true, total };
+    return { code: 200, data: list, success: true, total };
   }
 
   @Post('create')

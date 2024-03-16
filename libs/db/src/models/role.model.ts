@@ -8,7 +8,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { RoleAccess } from './role_access.model';
+import { RoleAccess } from './roleAccess.model';
 import { Access } from './access.model';
 
 @Table({ tableName: 'role' })

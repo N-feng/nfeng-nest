@@ -5,7 +5,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { LessonStudent } from './lesson_student.model';
+import { LessonStudent } from './lessonStudent.model';
 import { Lesson } from './lesson.model';
 
 @Table({ tableName: 'student', timestamps: false })

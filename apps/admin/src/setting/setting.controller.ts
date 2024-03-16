@@ -86,4 +86,13 @@ export class SettingController {
       msg: '上传失败',
     };
   }
+
+  @Get('flavorList')
+  @ApiOperation({ summary: '获取口味信息' })
+  async flavorList() {
+    const result = await this.settingService.findAll();
+    //少辣，不要葱，打包带走   ["少辣","不要葱"]
+    const list = result[0].orderLabel.replace('，', ',').split(',');
+    return { success: true, result: list };
+  }
 }

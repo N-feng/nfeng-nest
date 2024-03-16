@@ -6,7 +6,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Student } from './student.model';
-import { LessonStudent } from './lesson_student.model';
+import { LessonStudent } from './lessonStudent.model';
 
 @Table({ tableName: 'lesson', timestamps: false })
 export class Lesson extends Model {

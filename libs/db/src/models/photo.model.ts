@@ -1,4 +1,4 @@
-import { ProductModel } from './product.model';
+// import { ProductModel } from './product.model';
 import { SettingModel } from './setting.model';
 import { UserModel } from './user.model';
 import {
@@ -23,12 +23,12 @@ export class PhotoModel extends Model {
   @BelongsTo(() => UserModel)
   user: UserModel;
 
-  @ForeignKey(() => ProductModel)
-  @Column
-  productId: number;
+  // @ForeignKey(() => ProductModel)
+  // @Column
+  // productId: number;
 
-  @BelongsTo(() => ProductModel)
-  product: ProductModel;
+  // @BelongsTo(() => ProductModel)
+  // product: ProductModel;
 
   @ForeignKey(() => SettingModel)
   @Column

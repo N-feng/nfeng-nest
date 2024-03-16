@@ -12,7 +12,7 @@ export class SettingService {
     private photoModel: typeof PhotoModel,
   ) {}
 
-  async findAll(body) {
+  async findAll(body?) {
     const { current = 1, filter, pageSize = 9999, sorter, ...params } = body;
     console.log('filter: ', filter);
     console.log('sorter: ', sorter);

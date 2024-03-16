@@ -6,7 +6,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { ArticleCate } from './article_cate.model';
+import { ArticleCate } from './articleCate.model';
 
 @Table({ tableName: 'article', timestamps: false })
 export class Article extends Model {

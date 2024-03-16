@@ -1,4 +1,4 @@
-import { ProductCate } from '@app/db/models/product_cate.model';
+import { ProductCate } from '@app/db/models/productCate.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 

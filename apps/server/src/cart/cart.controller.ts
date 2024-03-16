@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { Config } from '../config/config';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CartService } from './cart.service';
@@ -24,13 +16,23 @@ export class CartController {
     return { code: 200, data: { list }, success: true, total };
   }
 
-  @Get('findOne')
-  @ApiOperation({ summary: '查询购物车' })
-  async findOne(@Query('id') id: number) {
-    const product = await this.cartService.findOne(id);
+  // @Get('findOne')
+  // @ApiOperation({ summary: '查询购物车' })
+  // async findOne(@Query('id') id: number) {
+  //   const product = await this.cartService.findOne(id);
+  //   return {
+  //     code: 200,
+  //     data: { product },
+  //   };
+  // }
+
+  @Get('cartCount')
+  @ApiOperation({ summary: '获取购物车总数量' })
+  async cartCount(@Query('id') id: number) {
+    const count = await this.cartService.cartCount(id);
     return {
       code: 200,
-      data: { product },
+      data: { count },
     };
   }
 
@@ -41,17 +43,17 @@ export class CartController {
     return { code: 200, data };
   }
 
-  @Put('update')
-  @ApiOperation({ summary: '更新购物车' })
-  async update(@Query('id') id: string, @Body() body) {
-    await this.cartService.update(id, body);
-    return { code: 200, data: {} };
-  }
+  // @Put('update')
+  // @ApiOperation({ summary: '更新购物车' })
+  // async update(@Query('id') id: string, @Body() body) {
+  //   await this.cartService.update(id, body);
+  //   return { code: 200, data: {} };
+  // }
 
   @Delete('remove')
   @ApiOperation({ summary: '删除购物车' })
-  async remove(@Query('id') id: any) {
-    await this.cartService.delete(id);
+  async remove(@Body() body: CreateCartDto) {
+    await this.cartService.delete(body);
     return { code: 200, data: {} };
   }
 }

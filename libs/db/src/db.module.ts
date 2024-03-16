@@ -1,20 +1,23 @@
 import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { RoleAccess } from './models/role_access.model';
+import { RoleAccess } from './models/roleAccess.model';
 import { Access } from './models/access.model';
 import { PhotoModel } from './models/photo.model';
 import { Role } from './models/role.model';
 import { UserModel } from './models/user.model';
-import { UserRoleModel } from './models/user_role.model';
+import { UserRoleModel } from './models/userRole.model';
 import { Article } from './models/article.model';
 import { Lesson } from './models/lesson.model';
 import { Student } from './models/student.model';
 import { ProductModel } from './models/product.model';
-import { ProductCate } from './models/product_cate.model';
+import { ProductCate } from './models/productCate.model';
 import { TableModel } from './models/table.model';
 import { SettingModel } from './models/setting.model';
 import { CartModel } from './models/cart.model';
+import { PeopleInfoModel } from './models/peopleInfo.model';
+import { OrderModel } from './models/order.model';
+import { OrderItemsModel } from './models/orderItems.model';
 
 const models = SequelizeModule.forFeature([
   Article,
@@ -31,6 +34,9 @@ const models = SequelizeModule.forFeature([
   TableModel,
   SettingModel,
   CartModel,
+  PeopleInfoModel,
+  OrderModel,
+  OrderItemsModel,
 ]);
 
 @Global()
@@ -56,7 +62,13 @@ const models = SequelizeModule.forFeature([
           TableModel,
           SettingModel,
           CartModel,
+          PeopleInfoModel,
+          OrderModel,
+          OrderItemsModel,
         ],
+        define: {
+          underscored: true,
+        },
       }),
     }),
     models,

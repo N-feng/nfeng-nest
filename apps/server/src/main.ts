@@ -28,7 +28,7 @@ async function bootstrap() {
     .setTitle('前端API')
     .setDescription('供网站和APP调用的服务端API')
     .setVersion('1.0')
-    .addBearerAuth()
+    // .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);

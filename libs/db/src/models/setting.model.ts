@@ -68,5 +68,5 @@ export class SettingModel extends Model {
 
   @HasMany(() => PhotoModel, 'settingId')
   // @Column
-  img_url: PhotoModel[];
+  imgUrl: PhotoModel[];
 }

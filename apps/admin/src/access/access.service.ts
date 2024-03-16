@@ -1,5 +1,5 @@
 import { Access } from '@app/db/models/access.model';
-import { RoleAccess } from '@app/db/models/role_access.model';
+import { RoleAccess } from '@app/db/models/roleAccess.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 

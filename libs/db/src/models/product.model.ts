@@ -3,13 +3,13 @@ import {
   Column,
   CreatedAt,
   ForeignKey,
-  HasMany,
+  // HasMany,
   Model,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { PhotoModel } from './photo.model';
-import { ProductCate } from './product_cate.model';
+// import { PhotoModel } from './photo.model';
+import { ProductCate } from './productCate.model';
 
 @Table({ tableName: 'product' }) // 设置表名称
 export class ProductModel extends Model<ProductModel> {
@@ -30,13 +30,13 @@ export class ProductModel extends Model<ProductModel> {
   content: string;
 
   @Column
-  sale_count: number;
+  saleCount: number;
 
   @Column
-  is_best: number;
+  isBest: number;
 
   @Column
-  is_hot: number;
+  isHot: number;
 
   @Column
   status: number;
@@ -50,10 +50,12 @@ export class ProductModel extends Model<ProductModel> {
   @UpdatedAt
   updatedAt?: Date;
 
-  @HasMany(() => PhotoModel, 'productId')
-  // @Column
-  img_url: PhotoModel[];
+  // @HasMany(() => PhotoModel, 'productId')
+  // img_url: PhotoModel[];
+
+  @Column
+  imgUrl: string;
 
   @BelongsTo(() => ProductCate, 'cid')
-  pro_cat;
+  proCat;
 }

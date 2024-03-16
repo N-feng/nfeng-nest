@@ -15,7 +15,7 @@ export class TableModel extends Model {
   title: string;
 
   @Column
-  table_num: string;
+  tableNum: string;
 
   @Column
   sort: number;

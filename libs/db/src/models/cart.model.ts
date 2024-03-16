@@ -7,14 +7,14 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-@Table({ tableName: 'cart' }) // 设置表名称
+@Table({ tableName: 'cart', underscored: true }) // 设置表名称
 export class CartModel extends Model {
   @PrimaryKey
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @Column
-  table_id: string;
+  tableId: string;
 
   @Column
   product_title: string;
@@ -27,6 +27,9 @@ export class CartModel extends Model {
 
   @Column
   product_num: number;
+
+  @Column
+  product_id: number;
 
   @CreatedAt
   created_at?: Date; // 增加时间

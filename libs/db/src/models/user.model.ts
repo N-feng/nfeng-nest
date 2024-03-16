@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { PhotoModel } from './photo.model';
 import { Role } from './role.model';
-import { UserRoleModel } from './user_role.model';
+import { UserRoleModel } from './userRole.model';
 
 @Table({ tableName: 'user' })
 export class UserModel extends Model<UserModel> {

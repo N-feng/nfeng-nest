@@ -1,5 +1,4 @@
 import { CartModel } from '@app/db/models/cart.model';
-import { PhotoModel } from '@app/db/models/photo.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
@@ -29,12 +28,12 @@ export class CartService {
     return { list, total };
   }
 
-  async findOne(id) {
-    return await this.cartModel.findOne({
-      where: { id },
-      include: [PhotoModel],
-    });
-  }
+  // async findOne(id) {
+  //   return await this.cartModel.findOne({
+  //     where: { id },
+  //     include: [PhotoModel],
+  //   });
+  // }
 
   /*
     增加购物车接口  
@@ -54,7 +53,7 @@ export class CartService {
     if (cartResult.length > 0) {
       this.cartModel.update(
         {
-          productNum: cartResult[0].productNum + 1,
+          product_num: cartResult[0].product_num + 1,
         },
         {
           where: {
@@ -71,11 +70,48 @@ export class CartService {
     return await this.cartModel.create(body);
   }
 
-  async update(id, body) {
-    return await this.cartModel.update(body, { where: { id } });
+  // async update(id, body) {
+  //   return await this.cartModel.update(body, { where: { id } });
+  // }
+
+  async delete(body) {
+    const tableId = body.tableId;
+    const productId = body.productId;
+    const cartResult: any = await this.cartModel.findAll({
+      where: {
+        table_id: tableId,
+        product_id: productId,
+      },
+    });
+    if (cartResult.length > 0) {
+      if (cartResult[0].product_num > 1) {
+        this.cartModel.update(
+          {
+            product_num: cartResult[0].product_num - 1,
+          },
+          {
+            where: {
+              tableId: tableId,
+              productId: productId,
+            },
+          },
+        );
+      } else {
+        this.cartModel.destroy({
+          where: {
+            table_id: tableId,
+            product_id: productId,
+          },
+        });
+      }
+      return { success: true, msg: '更新成功' };
+    }
+    return { success: false, msg: '更新失败' };
   }
 
-  async delete(id) {
-    return await this.cartModel.destroy({ where: { id } });
+  async cartCount(tableId) {
+    return await this.cartModel.sum('product_num', {
+      where: { table_id: tableId },
+    });
   }
 }

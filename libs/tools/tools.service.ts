@@ -131,4 +131,15 @@ export class ToolsService {
   //     }
   //   });
   // }
+
+  //获取订单号
+  getOrderId() {
+    const order_id = format(new Date(), 'YYYYMMDDHHmmss');
+    const numArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let randomStr = '';
+    for (let i = 0; i < 6; i++) {
+      randomStr += numArr[Math.floor(Math.random() * 10)];
+    }
+    return order_id + randomStr; /*字符串的拼接*/
+  }
 }
