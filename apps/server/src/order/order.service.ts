@@ -150,7 +150,49 @@ export class OrderService {
   }
 
   async update(id, body) {
-    return await this.orderModel.update(body, { where: { id } });
+    const tableId = id;
+    const totalPrice = body.totalPrice; //总价格
+    const totalNum = body.totalNum; //总数量
+    const orderItems = await this.productModel.findAll({
+      where: {
+        id: body.orderItems,
+      },
+    });
+    const orderResult = await this.orderModel.findAll({
+      where: {
+        tableId: tableId,
+        payStatus: 0,
+        orderStatus: 0,
+      },
+    });
+    if (orderResult.length > 0) {
+      //合并订单
+      await this.orderModel.update(
+        {
+          totalPrice: Number(totalPrice) + Number(orderResult[0].totalPrice),
+          totalNum: Number(totalNum) + Number(orderResult[0].totalNum),
+          ...body,
+        },
+        {
+          where: { id },
+        },
+      );
+      for (let i = 0; i < orderItems.length; i++) {
+        await this.orderItemsModel.create({
+          orderId: id,
+          tableId: tableId,
+          // productId: orderItems[i].productId,
+          // productImg: orderItems[i].productImg,
+          // productTitle: orderItems[i].productTitle,
+          // productPrice: orderItems[i].productPrice,
+          // productNum: orderItems[i].productNum,
+          productId: orderItems[i].id,
+          productTitle: orderItems[i].title,
+          productPrice: orderItems[i].price,
+          status: 1 /*状态是1  表示已经下厨     状态是2表示退菜*/,
+        });
+      }
+    }
   }
 
   async delete(id) {
