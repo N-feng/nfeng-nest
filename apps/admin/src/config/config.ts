@@ -1,6 +1,6 @@
 export class Config {
   //配置后台地址
-  static adminPath = 'admin';
+  static adminPath = 'api/admin';
 
   //配置排除的地址
   static ignoreUrl = [
