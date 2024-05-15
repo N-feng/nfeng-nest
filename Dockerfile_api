@@ -1,0 +1,6 @@
+FROM node
+COPY . /root/wwwroot/
+WORKDIR /root/wwwroot/
+EXPOSE 3002
+RUN npm install
+CMD npm run server
